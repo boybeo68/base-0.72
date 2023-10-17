@@ -4,8 +4,11 @@ import { NativeModules } from 'react-native'
 
 console.disableYellowBox = true
 
-const scriptURL = NativeModules.SourceCode.scriptURL
-let scriptHostname = scriptURL?.split('://')[1]?.split(':')[0]
+const scriptURL = NativeModules.SourceCode?.scriptURL
+console.log('bb log', NativeModules)
+const [scriptHostname] = scriptURL?.split('://')[1]?.split(':') ?? 'localhost'
+
+// let scriptHostname = scriptURL?.split('://')[1]?.split(':')[0]
 // console.log = Reactotron.log;
 // swizzle the old one
 const yeOldeConsoleLog = console.log
@@ -25,7 +28,7 @@ console.log = (...args) => {
 const reactotron = scriptHostname
   ? Reactotron.configure({
       name: 'Base',
-      host: scriptHostname,
+      // host: scriptHostname,
       port: 9090,
     })
       .useReactNative({
