@@ -1,0 +1,66 @@
+image: node:18
+
+stages:
+  - lint
+  - test
+  - codepush
+  - build
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+lint:types:
+  stage: lint
+  only:
+    - merge_requests
+  script:
+    - yarn install --frozen-lockfile
+    - yarn check-types
+    - yarn lint:check
+    - yarn prettier:check
+
+tests:unit:
+  stage: test
+  only:
+    - merge_requests
+  script:
+    - yarn install --frozen-lockfile
+    - yarn test --outputFile=junit.xml
+  artifacts:
+    paths:
+      - junit.xml
+    reports:
+      junit:
+        - junit.xml
+
+codepush:
+  stage: codepush
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(dev|uat|prod|lfvn|internal)$/ && $CI_COMMIT_MESSAGE =~ /Codepush/ && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        CODEPUSH_TARGET: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG =~ /codepush/
+      variables:
+        CODEPUSH_TARGET: $CI_COMMIT_TAG
+  script:
+    - |
+      echo "Codepushing"
+      yarn install --frozen-lockfile
+      npm install -g appcenter-cli
+      yarn codepush "$CODEPUSH_TARGET"
+
+build:
+  stage: build
+  only:
+    - tags
+  except:
+    variables:
+      - $CI_COMMIT_TAG =~ /codepush/
+  script:
+    - |
+      npm install -g appcenter-cli
+      npm install dotenv
+      echo "Building native app"
+      yarn build-native "$CI_COMMIT_TAG"

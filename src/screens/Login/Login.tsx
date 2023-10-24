@@ -12,7 +12,7 @@ const Login = () => {
     } catch (error) {}
   }
   return (
-    <View style={[Layout.fill, Layout.center]}>
+    <View style={[Layout.fill, Layout.center, { backgroundColor: 'blue' }]}>
       <Button icon="login" mode="contained" onPress={() => console.log('Pressed')}>
         Login
       </Button>
