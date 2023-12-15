@@ -24,7 +24,6 @@ const ApplicationNavigator = () => {
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
         <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen name="Startup" component={Startup} /> */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Main" component={MainNavigator} />
         </Stack.Navigator>

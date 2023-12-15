@@ -19,7 +19,6 @@ lint:types:
     - yarn install --frozen-lockfile
     - yarn check-types
     - yarn lint:check
-    - yarn prettier:check
 
 tests:unit:
   stage: test

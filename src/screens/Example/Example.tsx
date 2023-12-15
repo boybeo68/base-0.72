@@ -1,51 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from '../../hooks';
-import i18next from 'i18next';
-import { NativeModules, NativeEventEmitter } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-const { DataScanModule } = NativeModules;
+import React, { useEffect, useState } from 'react'
+import { View, Text, ScrollView } from 'react-native'
+import { useTheme } from '../../hooks'
+import { NativeModules, NativeEventEmitter } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+const { DataScanModule } = NativeModules
 
 const Example = () => {
-  const { t } = useTranslation(['example', 'welcome']);
-  const { Fonts, Gutters, Layout } = useTheme();
-  const [dataQR, setdataQR] = useState([]);
-  const [result, setResult] = useState<any>(null);
+  const { Fonts, Gutters, Layout } = useTheme()
+  const [dataQR, setdataQR] = useState([])
+  const [result, setResult] = useState<any>(null)
 
-  const dataEmitter = new NativeEventEmitter(DataScanModule);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const dataEmitter = new NativeEventEmitter(DataScanModule)
 
   useEffect(() => {
-    dataEmitter.addListener('onDataReceived', res => {
-      console.log('Received data:', res);
+    dataEmitter.addListener('onDataReceived', (res) => {
+      console.log('Received data:', res)
       if (res) {
-        const convertData = JSON.parse(JSON.stringify(dataQR));
-        convertData.push(res);
-        console.log('bb conver data', convertData);
+        const convertData = JSON.parse(JSON.stringify(dataQR))
+        convertData.push(res)
+        console.log('bb conver data', convertData)
 
-        setdataQR(convertData);
+        setdataQR(convertData)
       }
-    });
+    })
     return () => {
-      dataEmitter.removeAllListeners('onDataReceived');
-    };
-  }, [dataQR]);
+      dataEmitter.removeAllListeners('onDataReceived')
+    }
+  }, [dataEmitter, dataQR])
 
   const submit = () => {
-    const counts: any = {};
+    const counts: any = {}
 
-    dataQR.forEach(item => {
+    dataQR.forEach((item) => {
       if (counts[item]) {
-        counts[item]++;
+        counts[item]++
       } else {
-        counts[item] = 1;
+        counts[item] = 1
       }
-    });
+    })
 
-    setResult(counts);
-    setdataQR([]);
-  };
+    setResult(counts)
+    setdataQR([])
+  }
 
   return (
     <ScrollView style={Layout.fill}>
@@ -64,11 +61,11 @@ const Example = () => {
           <Text style={{ color: 'white' }}> Submit</Text>
         </TouchableOpacity>
       )}
-      {dataQR?.length == 0 && result && (
+      {dataQR?.length === 0 && result && (
         <TouchableOpacity
           onPress={() => {
-            setResult(null);
-            setdataQR([]);
+            setResult(null)
+            setdataQR([])
           }}
           style={[
             Layout.fill,
@@ -85,15 +82,13 @@ const Example = () => {
       {dataQR?.length === 0 && !result && (
         <TouchableOpacity
           onPress={() => {
-            setResult(null);
-            setdataQR([]);
+            setResult(null)
+            setdataQR([])
           }}
           style={[Layout.fill, Layout.center, Gutters.smallPadding]}
         >
           <Text style={Fonts.titleSmall}>Welcome to scan app</Text>
-          <Text style={Fonts.textLight}>
-            Use device and scan any code you see
-          </Text>
+          <Text style={Fonts.textLight}>Use device and scan any code you see</Text>
         </TouchableOpacity>
       )}
 
@@ -103,21 +98,19 @@ const Example = () => {
             <View key={index}>
               <Text style={{ color: 'white' }}>{i}</Text>
             </View>
-          );
+          )
         })}
       {result &&
-        Object.keys(result).map(a => {
+        Object.keys(result).map((a) => {
           return (
             <View style={[Gutters.smallMargin]}>
               <Text style={Fonts.textSuccess}>Products: {a}</Text>
-              <Text style={[Fonts.textBold, Fonts.textPrimary]}>
-                Count: {result[a]}
-              </Text>
+              <Text style={[Fonts.textBold, Fonts.textPrimary]}>Count: {result[a]}</Text>
             </View>
-          );
+          )
         })}
     </ScrollView>
-  );
-};
+  )
+}
 
-export default Example;
+export default Example

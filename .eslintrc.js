@@ -27,11 +27,8 @@ module.exports = {
         'no-undef': 'warn',
         'react/no-unstable-nested-components': 'off',
         'react-native/no-inline-styles': 'off',
-        '@typescript-eslint/no-unused-vars': [
-          'error',
-          { varsIgnorePattern: '^_' },
-        ],
+        '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
       },
     },
   ],
-};
+}

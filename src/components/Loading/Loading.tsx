@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ActivityIndicator, StyleSheet, Modal } from 'react-native'
 import { Text } from 'react-native-paper'
-import { color } from 'theme/color'
+import { Colors } from 'theme/Variables'
 
 interface LoadingProps {
   visible: boolean
@@ -14,7 +14,7 @@ const Loading: React.FC<LoadingProps> = ({ visible }) => {
     <Modal visible={visible} transparent>
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <ActivityIndicator size="large" color={color.palette.main} />
+          <ActivityIndicator size="large" color={Colors.primary} />
           <Text style={styles.text}>Loading...</Text>
         </View>
       </View>
